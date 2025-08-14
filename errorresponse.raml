@@ -1,0 +1,74 @@
+#%RAML 1.0 traits
+    
+   responses:
+      400:
+        body:
+          application/json:
+            example: |
+              {
+                "error": "BadRequest",
+                "message": "Validation failed.",
+                "details": [
+                  { "field": "noteId", "issue": "noteId must be a positive integer." }
+                ],
+                "timestamp": "2024-07-27T12:34:56Z",
+                "path": "/api/notes/101"
+              }
+      401:
+        body:
+          application/json:
+            example: |
+              {
+                "error": "Unauthorized",
+                "message": "Access token is missing or invalid.",
+                "timestamp": "2024-07-27T12:35:01Z",
+                "path": "/api/notes/101"
+              }
+      403:
+        body:
+          application/json:
+            example: |
+              {
+                "error": "Forbidden",
+                "message": "You do not have permission to perform this action.",
+                "timestamp": "2024-07-27T12:35:10Z",
+                "path": "/api/notes/101"
+              }
+      404:
+        body:
+          application/json:
+            example: |
+              {
+                "error": "NotFound",
+                "message": "Note with id 101 not found.",
+                "timestamp": "2024-07-27T12:35:20Z",
+                "path": "/api/notes/101"
+              }
+      415:
+        body:
+          application/json:
+            example: |
+              {
+                "error": "UnsupportedMediaType",
+                "message": "Content-Type 'text/plain' is not supported. Please use 'application/json'.",
+                "timestamp": "2024-07-27T12:35:40Z",
+                "path": "/api/notes/101"
+              }
+      429:
+        body:
+          application/json:
+            example: |
+              {
+                "error": "TooManyRequests",
+                "message": "Rate limit exceeded. Please try again later.",
+                "timestamp": "2024-07-27T12:35:50Z",
+                "path": "/api/notes/101"
+              }
+      500:
+        body:
+          application/json:
+            example: |
+              {
+                "error": "InternalServerError",
+                "message": "An unexpected error occurred"
+              }

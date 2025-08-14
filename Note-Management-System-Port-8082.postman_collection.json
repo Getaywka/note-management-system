@@ -1,0 +1,256 @@
+{
+	"info": {
+		"_postman_id": "note-management-system-2025",
+		"name": "Note-Management-System",
+		"description": "This is a Mule RESTful API for Note Management System with database and Salesforce integration.\n\n<img src=\"https://content.pstmn.io/d93006fd-e1c2-4d1b-ae01-a5c5aa43b935/cGhvdG9fMjAyNC0wNS0wMV8yMS01OS00MS5qcGc=\" alt=\"\">",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "note-management-2025"
+	},
+	"item": [
+		{
+			"name": "Notes",
+			"item": [
+				{
+					"name": "Get All Notes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8082/api/notes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"api",
+								"notes"
+							]
+						},
+						"description": "Retrieve all notes from the database. Returns an array of notes with id, title, content, createdAt, and updatedAt fields."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Single Note",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8082/api/notes/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"api",
+								"notes",
+								"1"
+							]
+						},
+						"description": "Retrieve a specific note by its ID. Returns 404 if note doesn't exist."
+					},
+					"response": []
+				},
+				{
+					"name": "Create New Note",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Meeting Notes\",\n    \"content\": \"Discussed project timeline and deliverables for Q4. Key action items: 1) Complete API documentation, 2) Finalize testing strategy, 3) Schedule deployment window.\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8082/api/notes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"api",
+								"notes"
+							]
+						},
+						"description": "Create a new note. The note will be stored in both database and Salesforce, and a backup file will be created."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Note (PUT)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Updated Meeting Notes\",\n    \"content\": \"Updated discussion points: 1) API documentation completed, 2) Testing strategy finalized with automated tests, 3) Deployment scheduled for next Friday.\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8082/api/notes/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"api",
+								"notes",
+								"1"
+							]
+						},
+						"description": "Update an existing note or create a new one if the ID doesn't exist (UPSERT operation)."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Note",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8082/api/notes/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"api",
+								"notes",
+								"1"
+							]
+						},
+						"description": "Delete a specific note by its ID. Returns 404 if note doesn't exist."
+					},
+					"response": []
+				}
+			],
+			"description": "To manage individual notes - create, read, update, and delete operations.\n\n<img src=\"https://content.pstmn.io/39b39d96-a157-435d-975b-ea80f8de98fa/VGVybS1EZWZpbml0aW9uc19Qcm9kdWN0LUxpbmUtRmluYWwtNTg4NzAxMTNhM2NhNDc3MGE4NWNhYmYzNTQ5ODk0YmIuanBn\" alt=\"\">"
+		},
+		{
+			"name": "Bulk Operations",
+			"item": [
+				{
+					"name": "Bulk Create Notes",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n    {\n        \"title\": \"Daily Standup - Monday\",\n        \"content\": \"Team updates: John completed the authentication module, Sarah is working on the payment gateway integration, Mike finished the database optimization.\"\n    },\n    {\n        \"title\": \"Client Meeting Notes\",\n        \"content\": \"Client requested additional features: 1) Email notifications, 2) Advanced reporting dashboard, 3) Mobile app compatibility. Budget approved for Q1 2025.\"\n    },\n    {\n        \"title\": \"Technical Debt Review\",\n        \"content\": \"Identified areas for improvement: 1) Legacy code refactoring, 2) Database performance optimization, 3) Security vulnerability patches. Priority: High.\"\n    },\n    {\n        \"title\": \"Sprint Planning\",\n        \"content\": \"Sprint 15 goals: Complete user management module, implement API rate limiting, conduct security audit. Duration: 2 weeks.\"\n    },\n    {\n        \"title\": \"Code Review Notes\",\n        \"content\": \"Review findings: Good separation of concerns, need to add more unit tests, consider implementing caching for frequently accessed data.\"\n    }\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8082/api/bulk",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"api",
+								"bulk"
+							]
+						},
+						"description": "Create multiple notes in a single request. Each note will be processed individually and stored in the database."
+					},
+					"response": []
+				}
+			],
+			"description": "Bulk operations for creating multiple notes at once.\n\n<img src=\"https://content.pstmn.io/cf6b7f22-f59e-489b-a819-e113cda9dc01/MjA2MDI4MDRfNjMyMjY3NS5qcGc=\" alt=\"\">"
+		},
+		{
+			"name": "Advanced Operations",
+			"item": [
+				{
+					"name": "Create Note with ID (POST)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Specific ID Note\",\n    \"content\": \"This note is created with a specific ID using POST method. Useful for data migration or specific ID requirements.\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8082/api/notes/100",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"api",
+								"notes",
+								"100"
+							]
+						},
+						"description": "Create a note with a specific ID using POST method."
+					},
+					"response": []
+				}
+			],
+			"description": "Advanced note operations and special use cases.\n\n<img src=\"https://content.pstmn.io/5ae084e6-3bcd-4fd3-85f9-1ceefe50a55d/MTE4Nzg5NThfT25saW5lX1Nob3BpbmdfMjkuanBn\" alt=\"\">"
+		},
+		{
+			"name": "API Console",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/console",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"console"
+					]
+				},
+				"description": "Access the API console for interactive documentation and testing. This provides a web interface to explore the API endpoints."
+			},
+			"response": []
+		}
+	]
+}

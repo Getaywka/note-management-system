@@ -1,0 +1,11 @@
+#%RAML 1.0 Library
+traits:
+  errorvar: !include errorresponse.raml
+types:
+  posttype: !include Datatype/PostNote.raml
+  notid:    !include Datatype/notid.raml
+  updatedatatype: !include Datatype/updateDatatype.raml
+securitySchemes:
+  login-Authentication: !include securityschema/OAuthsecurity.raml
+  Admin: !include securityschema/Basicsecurity.raml
+

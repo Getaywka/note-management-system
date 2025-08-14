@@ -1,0 +1,183 @@
+#%RAML 1.0
+title: CraftSoft Notes API
+version: v1
+
+baseUri: https://api.craftsoft.com/{version}
+mediaType: 
+  - application/json
+  - application/xml
+protocols:
+  - https
+  - http
+
+uses:
+  Notelibrary: library.raml
+  ann: annotation.raml
+
+documentation:
+  - !include Note-management-documentation.raml
+
+resourceTypes:
+  resourceType:
+    get:
+      securedBy:
+        - Notelibrary.Admin
+      description: List all notes stored in the database.
+      (ann.owner): Notes Team
+      (ann.lastModified): 2024-07-27T12:00:00Z
+      (ann.deprecated): This endpoint will be removed in v2. Please use /api/v2/notes.
+      responses:
+        200:
+          body:
+            application/json:
+              example:
+                - id: 101
+                  title: First Note
+                  content: This is the first note.
+                  createdAt: 2024-07-25T10:00:00Z
+                  updatedAt: 2024-07-25T10:00:00Z
+                - id: 102
+                  title: Second Note
+                  content: This is the second note.
+                  createdAt: 2024-07-26T11:00:00Z
+                  updatedAt: 2024-07-26T11:00:00Z
+      is: [Notelibrary.errorvar]
+    post:
+      description: Insert a new note into the database.
+      (ann.owner): Notes Team
+      (ann.lastModified): 2025-07-27T12:00:00Z
+      (ann.deprecated): This endpoint will be removed in v2. Please use /api/v2/notes.
+      body:
+        application/json:
+          type: Notelibrary.posttype
+          example: !include Example/NoteExample.raml
+      responses:
+        200:
+          body:
+            application/json:
+              example: !include Example/SucessfullExample.raml
+              type: any
+      is: [Notelibrary.errorvar]
+
+/api/notes:
+  type: resourceType
+
+  get:
+    description: List all notes stored in the database.
+    responses:
+      200:
+        body:
+          application/json:
+            example:
+              - id: 101
+                title: First Note
+                content: This is the first note.
+                createdAt: 2024-07-25T10:00:00Z
+                updatedAt: 2024-07-25T10:00:00Z
+              - id: 102
+                title: Second Note
+                content: This is the second note.
+                createdAt: 2024-07-26T11:00:00Z
+                updatedAt: 2024-07-26T11:00:00Z
+    is: [Notelibrary.errorvar]
+
+  post:
+    description: Insert a new note into the database.
+    body:
+      application/json:
+        type: Notelibrary.posttype
+        example: !include Example/NoteExample.raml
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include Example/SucessfullExample.raml
+            type: any
+    is: [Notelibrary.errorvar]
+
+/bulk:
+  post:
+      description: Create multiple notes in bulk
+      body:
+        application/json:
+          type: array
+          example: |
+            [
+              {
+                "title": "Development Sync",
+                "content": "Planning session for upcoming deployment."
+              },
+              {
+                "title": "Requirements Review", 
+                "content": "Initial project planning session scheduled for Monday."
+              }
+            ]
+      responses:
+        201:
+          body:
+            application/json:
+              example: |
+                {
+                  "status": "success",
+                  "message": "Bulk notes processed successfully",
+                  "total_received": 2,
+                  "successfully_processed": 2,
+                  "timestamp": "2025-08-03T15:50:00Z"
+                }
+        400:
+          body:
+            application/json:
+              example: |
+                {
+                  "error": "Invalid input - expected JSON array of notes",
+                  "timestamp": "2025-08-03T15:50:00Z"
+                }
+      is: [Notelibrary.errorvar]
+
+/api/notes/{noteId}:
+  uriParameters:
+    noteId:
+      type: string
+      description: Unique identifier for the note.
+  get:
+    description: Retrieve a single note by ID.
+    responses:
+      200:
+        body:
+          application/json:
+            type: Notelibrary.notid
+            example: !include Example/singelNote.raml
+    is: [Notelibrary.errorvar]
+
+  put:
+    description: Update an existing note or create it if it does not exist.
+    body:
+      application/json:
+        type: Notelibrary.updatedatatype
+        example: !include Example/UpdateExample.raml
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include Example/UpdateSucess.raml
+      201:
+        body:
+          application/json:
+            example: !include Example/CreateExample.raml
+    is: [Notelibrary.errorvar]
+
+  delete:
+    description: Delete the note by ID.
+    securedBy:
+      - Notelibrary.Admin
+    responses:
+      200:
+        body:
+          application/json:
+            example:
+              {
+                "Message": "Note Deleted sucessfully!",
+                "NoteId": 2
+              }
+        description: Note deleted successfully!.
+    is: [Notelibrary.errorvar]
